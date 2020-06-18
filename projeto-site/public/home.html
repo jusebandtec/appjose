@@ -11,6 +11,7 @@
     <title>Games - José</title>
     <script src="https://kit.fontawesome.com/8034edf1bb.js" crossorigin="anonymous"></script>
     <script src="./javascript/regulacao.js"></script>
+    <script type="text/javascript" src="funcoes.js"></script>
 </head>
 <body>
     <header>
@@ -24,9 +25,11 @@
                 </label>
                 <div class="nav">
                     <ul>
+                        <p>Olá, <b id="b_usuario"></b></p>
                         <li><a href="home.html">Home</a></li>
                         <li><a href="#footer">Rodapé</a></li>
-                        <li><a class="current" href="register.html">Contato</a></li>
+                        <li><a class="current" href="login.html">Contato</a></li>
+                        <li><a href="#" id="log-out" class="fa fa-sign-out" onclick="logoff()">  Sair</a></li>
                 </div>
             </div>
         </div>
@@ -67,7 +70,6 @@
                         <li><a href="#brawl">Brawl <span id="current">Stars</span></a></li>
                         <li><a href="#cs">CS:GO</a></li>
                         <li><a href="#cops">Critical Ops</a></li>
-                        <li><a href=""></a></li>
                     </ul>
                 </div>
             </div>
@@ -131,7 +133,7 @@
                         <li><a href="https://www.facebook.com/josepaulo.marinho.9"><img src="./img/facebook (2).png" alt="Rede Social Facebook"></a></li>
                         <li><a href="https://www.linkedin.com/in/jos%C3%A9-paulo-marinho-da-silva-6034441a1/"><img src="./img/linkedin (2).png" alt="Rede Social Linkedin"></a></li>
                     </ul> <br>
-                    <a id="contact" href="register.html">Contato</a>
+                    <a id="contact" href="login.html">Contato</a>
                 </div>
             </div>
         </div>

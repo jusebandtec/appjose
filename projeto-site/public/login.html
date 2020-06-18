@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="shortcut icon" href="./img/login.png" type="image/png" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/8034edf1bb.js" crossorigin="anonymous"></script>
+    <script src="funcoes.js"></script>
+</head>
+<body>
+    <div id="msgpopup" style="display: none;">
+        <div class="container-pop-up">
+            <br>
+            <div id="mensagemAcerto" style="margin-top: 50px;"></div>
+            <ul id="mensagemErro" class="m-erro"></ul>
+            <button onclick="ok()" id="tudook">OK</button>
+        </div>
+    </div>
+    <div class="main">
+        <div class="container">
+            <div class="box1">
+                <br>
+                <a href="home.html"><img src="./img/left.png" alt="Voltar Página Home"></a>
+                <h2>Bem-vindo</h2>
+                <p>Para se comunicar com José Paulo, faça o seu cadastro ao lado</p>
+                <p>Se quiser sair com ele, ou até jogar, bater um papo.</p>
+            </div>
+            <div class="box2">
+                <h2>Coloque seus dados</h2>
+                <ul id="lista-redes">
+                    <li><a href="https://pt-br.facebook.com/"><img src="./img/facebook (1).png" alt="Logo Facebook"></a></li>
+                    <li><a class="current" href="https://accounts.google.com/signin/v2/identifier?flowName=GlifWebSignIn&flowEntry=ServiceLogin"><img src="./img/google-plus.png" alt="Logo Google Accounts"></a></li>
+                    <li><a href="https://www.linkedin.com/login"><img src="./img/linkedin (1).png" alt="Logo Linkedin"></a></li>
+                </ul>
+                <p>Ou use seu email para comunicar-se:</p>
+                <form id="form_login" method="post" onsubmit="return entrar()">
+                    Usuário:  <br><input type="text" name="login">
+                    <br>
+                    Senha: <br> <input type="password" name="senha">
+                    <br> <br> <br>
+                    <button id="btn_entrar">Entrar</button>
+                </form>
+                
+                <img src="aguarde.gif" id="img_aguarde" style="display: none;">
+                
+                <div id="div_erro" style="background-color: sandybrown; color: maroon; display: none;">
+                    
+                </div>
+        </div>
+    </div>
+    
+
+</body>
+
+</html>
+<script>
+
+    function entrar() {
+        aguardar();
+        var formulario = new URLSearchParams(new FormData(form_login));
+        fetch("/usuarios/autenticar", {
+            method: "POST",
+            body: formulario
+        }).then(resposta => {
+            
+            if (resposta.ok) {
+
+                resposta.json().then(json => {
+
+                    sessionStorage.login_usuario_meuapp = json.email;
+                    sessionStorage.nome_usuario_meuapp = json.nome;
+                    
+                    window.location.href = 'home.html';
+                });
+
+            } else {
+
+                console.log('Erro de login!');
+
+                response.text().then(texto => {
+                    console.error(texto);
+                    finalizar_aguardar(texto);
+                });
+            }
+        });
+
+        return false;
+    }
+
+    function aguardar() {
+        btn_entrar.disabled = true;
+        img_aguarde.style.display = 'block';
+        div_erro.style.display = 'none';
+    }
+
+    function finalizar_aguardar(resposta) {
+        btn_entrar.disabled = false;
+        img_aguarde.style.display= 'none';
+        div_erro.style.display = 'block';
+        div_erro.innerHTML = resposta;
+    }
+    
+    function btnEnviaContato() {
+        msgpopup.style.display = 'block';
+        var temErros = validaContato();
+        mensagemErro.innerHTML = '';
+        mensagemAcerto.innerHTML = '';
+         
+        if(temErros.length > 0) {
+            for(var i = 0; i<temErros.length; i++) {
+                var erro = temErros[i];
+                var li = document.createElement("li");
+                li.innerHTML = erro;
+                mensagemErro.appendChild(li)
+            }
+        } else {
+            var p = document.createElement("p");
+            p.innerHTML = "Sua mensagem foi enviada!";
+            mensagemAcerto.appendChild(p);
+        }
+        return;
+    }
+
+    function validaContato() {
+        var erros = [];
+        var email = emailInput.value;
+        if(!nome) {
+            erros.push('Preencha o nome e sobrenome')
+        }
+        if(nome.search(" ") == -1 ||
+        nome[nome.length -1 ] == " " || 
+        nome[0] == " ") {
+            erros.push('Colocar o sobrenome')
+        }
+        if(telefoneFormulario.search("-") == -1 ||
+        telefoneFormulario.length < 12 ||
+        telefoneFormulario[telefoneFormulario.length -5] != "-"
+        ) {
+            erros.push('O telefone deve ter esse formato 00 9 0000-0000')
+        }
+        if(email.indexOf("@") == -1 )  {
+            erros.push('O formato do email deve ser usuario@dominio.com');
+        } else {
+            var parts = email.split("@");
+            var dominio = parts[1];
+
+            if(dominio.indexOf(".") == -1) {
+                erros.push('O formado do email deve ser usuario@dominio.com');
+            } else {
+                var dominioParts = dominio.split('.')
+                var extensao = dominioParts[1];
+                if( extensao.length > 4 ||
+                extensao.length < 2) {
+                    erros.push('o formado do email deve ser usuario@dominio.com');
+                }
+            }
+        }
+        return erros;
+    }
+    function ok() {
+        msgpopup.style.display = 'none';
+        document.querySelectorAll('icon_input').style.opacity = '1';
+    }
+</script>
