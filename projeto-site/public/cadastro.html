@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="shortcut icon" href="./img/export.png" type="image/png" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/8034edf1bb.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="msgpopup" style="display: none;">
+        <div class="container-pop-up">
+            <br>
+            <div id="mensagemAcerto" style="margin-top: 50px;"></div>
+            <ul id="mensagemErro" class="m-erro"></ul>
+            <button onclick="ok()" id="tudook">OK</button>
+        </div>
+    </div>
+    <div class="main">
+        <div class="container">
+            <div class="box1">
+                <br>
+                <a href="home.html"><img src="./img/left.png" alt="Voltar Página Home"></a>
+                <h2>Bem-vindo</h2>
+                <p>Para se comunicar com José Paulo, faça o seu cadastro ao lado</p>
+                <p>Se quiser sair com ele, ou até jogar, bater um papo.</p>
+            </div>
+            <div class="box2">
+                <h2>Coloque seus dados</h2>
+                <ul id="lista-redes">
+                    <li><a href="https://pt-br.facebook.com/"><img src="./img/facebook (1).png" alt="Logo Facebook"></a></li>
+                    <li><a class="current" href="https://accounts.google.com/signin/v2/identifier?flowName=GlifWebSignIn&flowEntry=ServiceLogin"><img src="./img/google-plus.png" alt="Logo Google Accounts"></a></li>
+                    <li><a href="https://www.linkedin.com/login"><img src="./img/linkedin (1).png" alt="Logo Linkedin"></a></li>
+                </ul>
+                <p>Ou use seu email para cadastrar-se:</p>
+                <form>
+                    Nome: <br><input type="text" name="nome" id="nameInput" placeholder="Usuario Arroba"> <br>
+                    Email:  <br><input type="text" name="login" id="emailInput" placeholder="usuario@dominio.com">
+                    <br>
+                    Senha: <br> <input type="password" name="senha" id="senhaInput" placeholder="*******"> <br>
+                    Telefone: <br> <input type="text" placeholder="00 9 0000-0000" id="numberInput"> 
+                    <br> <br>
+                    <button id="btn_entrar" onclick="btnEnviaContato()">Entrar</button>
+                </form>
+                <div id="msgpopup">
+                    <div id="mensagemAcerto"></div>
+                    <ul id="mensagemErro" class="m-erro"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    function btnEnviaContato() {
+        msgpopup.display.style = 'block';
+        var erros = validaContato();
+        mensagemErro.innerHTML = "";
+        mensagemAcerto.innerHTML = "";
+
+        if (erros.length > 0) {
+          for (var i = 0; i < erros.length; i++) {
+            var erro = erros[i];
+            var li = document.createElement("li");
+            li.innerHTML = erro;
+            mensagemErro.appendChild(li);
+          }
+        } else {
+          var p = document.createElement("p");
+          p.innerHTML = "Sua mensagem foi enviada!";
+          mensagemAcerto.appendChild(p);
+        }
+
+        // Aqui vai ter um código que envia as
+        // informações preenchidas para o BD
+        return;
+      }
+
+      function validaContato() {
+        var erros = [];
+        console.log(emailInput.value.indexOf("@") == -1);
+
+        if (!nameInput.value) {
+          erros.push("O nome não foi preenchido");
+        }
+
+        if (
+          nameInput.value.search(" ") == -1 ||
+          nameInput.value[nameInput.value.length - 1] == " " ||
+          nameInput.value[0] == " "
+        ) {
+          erros.push("Insira o sobrenome");
+        }
+
+        if (
+          numberInput.value.search("-") == -1 ||
+          numberInput.value.length < 12 ||
+          numberInput.value[numberInput.value.length - 5] != "-"
+        ) {
+          erros.push("O telefone deve ter formato: 00 90000-0000");
+        }
+
+        if (!avaliacao.value || isNaN(avaliacao.value)) {
+          erros.push("Insira um número valido avaliação");
+        }
+        
+        if (emailInput.value.indexOf("@") == -1) {
+          erros.push("O formato de email é: usuario@dominio.com");
+        } else {
+          var parts = emailInput.value.split("@");
+          var domain = parts[1];
+
+          if (domain.indexOf(".") == -1) {
+            erros.push("O formato de email é: usuario@dominio.com");
+          } else {
+            var domainParts = domain.split(".");
+            var ext = domainParts[1];
+
+            if (ext.length > 4 || ext.length < 2) {
+              erros.push("O formato de email é: usuario@dominio.com");
+            }
+          }
+        }
+
+        return erros;
+      }
+</script>

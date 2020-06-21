@@ -224,6 +224,7 @@ header {
 }
 #cops {
     background-image: url('../img/fundocops.jpg');
+    margin-top: -5px;
 }
 #cops .container {
     display: flex;
@@ -253,6 +254,7 @@ header {
     height: 230px;
 }
 #footer .container {
+    margin-top: -5px;
     height: 230px;
     background-color: #3C3D41;
     display: grid;
